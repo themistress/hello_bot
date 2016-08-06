@@ -49,18 +49,25 @@ def rules(recipient_id, message_text):
     Hernals = {"Hernals", "hernals", "1170", "hernois"}
     thanks = {"Thank you", "Thanks", "thx", "thanks", "thank you"}
 
-    if "Noestlinger" in message_text:
-        reply(recipient_id, "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
-    elif message_text == "Awesome!":
-        reply_picture(recipient_id, "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
-    elif any(x in message_text for x in hellos):
+    found_reply = False
+    if any(x in message_text for x in hellos):
         reply(recipient_id, "Hi! I can give you information on women in your area who did great things. :) Tell me where you are or activate your GPS.")
-    elif any(x in message_text for x in Hernals):
+        found_reply = True
+    if message_text == "Awesome!":
+        reply_picture(recipient_id, "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
+        found_reply = True
+    if any(x in message_text for x in Hernals):
         reply(recipient_id, "Notable women in your are are Margarete Schütte-Lihotzky, Christine Nöstlinger and Hedy Lamarr.")
-    elif any(x in message_text for x in thanks):
+        found_reply = True
+    if any("noestlinger" in message_text):
+        reply(recipient_id,
+              "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
+        found_reply = True
+    if any(x in message_text for x in thanks):
         reply(recipient_id, "You're welcome! Happy to help! :)")
+        found_reply = True
 
-    else:
+    if not found_reply:
         reply(recipient_id, "I'm sorry, I didn't get that. Could you please rephrase it?")
 
 
