@@ -49,7 +49,7 @@ def rules(recipient_id, message_text):
     Hernals = {"Hernals", "hernals", "1170", "hernois"}
     thanks = {"Thank you", "Thanks", "thx", "thanks", "thank you"}
 
-    if "Noestlinger" in message_text:
+    if "noestlinger" in message_text:
         reply(recipient_id, "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
     elif message_text == "Awesome!":
         reply_picture(recipient_id, "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
