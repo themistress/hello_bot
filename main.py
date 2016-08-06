@@ -49,9 +49,9 @@ def rules(recipient_id, message_text):
     Hernals = {"Hernals", "hernals", "1170", "hernois"}
     thanks = {"Thank you", "Thanks", "thx", "thanks", "thank you"}
 
-    if any("noestlinger" in message_text):
+    if any(x in message_text for x in ["noestlinger"]):
         reply(recipient_id, "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
-    elif message_text == "Awesome!":
+    elif message_text == "awesome!":
         reply_picture(recipient_id, "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
     elif any(x in message_text for x in hellos):
         reply(recipient_id, "Hi! I can give you information on women in your area who did great things. :) Tell me where you are or activate your GPS.")
