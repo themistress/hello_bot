@@ -43,24 +43,17 @@ def post_webhook():
 
 
 def rules(recipient_id, message_text):
-    rules = {
-        "Hello": "Hi!",
-        "Foo": "Bar",
-
-
-    }
+    message_text = message_text.lower()
 
     hellos = {"hi", "hey", "hallo", "hello", "heyya"}
     Hernals = {"Hernals", "hernals", "1170", "hernois"}
     thanks = {"Thank you", "Thanks", "thx", "thanks", "thank you"}
 
-    if message_text in rules:
-        reply(recipient_id, rules[message_text])
-    elif "Noestlinger" in message_text:
+    if "Noestlinger" in message_text:
         reply(recipient_id, "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
     elif message_text == "Awesome!":
         reply_picture(recipient_id, "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
-    elif message_text in hellos:
+    elif any(x in message_text for x in hellos):
         reply(recipient_id, "Hi! I can give you information on women in your area who did great things. :) Tell me where you are or activate your GPS.")
     elif any(x in message_text for x in Hernals):
         reply(recipient_id, "Notable women in your are are Margarete Schütte-Lihotzky, Christine Nöstlinger and Hedy Lamarr.")
