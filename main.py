@@ -5,7 +5,7 @@ import requests
 
 app = Flask(__name__)
 
-access_token = 'EAAHrTD3BmqoBADRttssK9FZAUGVFZAALxfb1rIKOZBHITOGvUBKGAqkNw2Sa85fSByMltBx1htNnFTvmQ577AUsD4B4Orvw2dLuGDkRNdyZAGmonzZC79naiOIAnuQuoyTLu57Q5nmaTDunDTTEklxnEBonHatnttaxZCnTwzrQwZDZD'
+access_token = 'EAAHrTD3BmqoBAMexXRo7kAyVFnlPkjkcKHoqLP7Ersyy0cxZBTWGKszelZCO4XT9ZBqqIxWUUddgZCtxgmPhh3tVDuHT1qweZAF2XsNCZAH9ty2joDPHPmZAIMRnavX5bhAHDJWJNwCR87LXBvYYetBO5Ca74rz37ZAG7YmRE2GZBuAZDZD'
 
 
 @app.route("/", methods=["GET"])
@@ -41,6 +41,7 @@ def post_webhook():
 
     return "ok", 200
 
+
 def rules(recipient_id, message_text):
     rules = {
         "Hello": "Hi!",
@@ -55,7 +56,7 @@ def rules(recipient_id, message_text):
 
     if message_text in rules:
         reply(recipient_id, rules[message_text])
-    elif any("Noestlinger" in message_text):
+    elif "Noestlinger" in message_text:
         reply(recipient_id, "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
     elif message_text == "Awesome!":
         reply_picture(recipient_id, "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
