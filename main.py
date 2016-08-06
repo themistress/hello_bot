@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import json, urllib
+import json, urllib, re
 from flask import Flask, request, abort
-import urlfetch
+import requests
 
 app = Flask(__name__)
 
-access_token = 'EAAHrTD3BmqoBAAdQ7J9eULIQdbWZAIwII9zMGCvbqISaxf0SObuY5qnuVVYfNu1Dq6t79wzkZBsnYroR4St1ywm5TZAd1Qi1Gco4LPQXTaRJuUXK1CSq5tNzWYjvk7l1yMu17yMjuhtnwoQZADZAk6EGsebKRakKv4OPvHVp9QAZDZD'
+access_token = 'EAAHrTD3BmqoBAHFIYTzKm8vRV5FZAZAIgqNjBuZCEs8MELdZCcstb0ZB2C7bA4LGXxFw1DaB1XZAZB2ty94FhnJO0vRsN5n4S0qrm9N2xWiZB7uaet78Sb3w9G9eSDaL5nlbT7bV1Vjm0dRmfHxQy9CRBHDhobsgjwHk9s9gOeIjYAZDZD'
+
 
 
 @app.route("/", methods=["GET"])
@@ -16,7 +17,6 @@ def root():
 # webhook for facebook to initialize the bot
 @app.route('/webhook', methods=['GET'])
 def get_webhook():
-
     if not 'hub.verify_token' in request.args or not 'hub.challenge' in request.args:
         abort(400)
 
@@ -41,11 +41,11 @@ def post_webhook():
 
     return "ok", 200
 
+
 def rules(recipient_id, message_text):
     rules = {
         "Hello": "Hi!",
         "Foo": "Bar",
-
 
     }
 
@@ -56,13 +56,17 @@ def rules(recipient_id, message_text):
     if message_text in rules:
         reply(recipient_id, rules[message_text])
     elif any("Noestlinger" in message_text):
-        reply(recipient_id, "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
+        reply(recipient_id,
+              "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
     elif message_text == "Awesome!":
-        reply_picture(recipient_id, "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
+        reply_picture(recipient_id,
+                      "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
     elif message_text in hellos:
-        reply(recipient_id, "Hi! I can give you information on women in your area who did great things. :) Tell me where you are or activate your GPS.")
+        reply(recipient_id,
+              "Hi! I can give you information on women in your area who did great things. :) Tell me where you are or activate your GPS.")
     elif any(x in message_text for x in Hernals):
-        reply(recipient_id, "Notable women in your are are Margarete Schütte-Lihotzky, Christine Nöstlinger and Hedy Lamarr.")
+        reply(recipient_id,
+              "Notable women in your are are Margarete Schütte-Lihotzky, Christine Nöstlinger and Hedy Lamarr.")
     elif any(x in message_text for x in thanks):
         reply(recipient_id, "You're welcome! Happy to help! :)")
 
@@ -95,39 +99,6 @@ def reply(recipient_id, message_text):
 
     print r.content
 
-    curl - X
-    POST - H
-    "Content-Type: application/json" - d
-    '{
-    "recipient":{
-                    "id": "USER_ID"
-                },
-    "message":{
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "button",
-                "text": "How can I help you further?",
-                "buttons": [
-                    {
-                        "type": "web_url",
-                        "url": "https://en.wikipedia.org/wiki/Christine_Nöstlinger",
-                        "title": "Take me to Wikipedia"
-
-                        "type": "web_url",
-                        "url": "https://www.goodreads.com/book/show/252847.Gretchen_Sackmeier_3_Sonderausgabe_aller_drei_Gretchen_B_nde_",
-                        "title": "Recommend me a book"
-                    },
-                    {
-                        "type": "image",
-                        "title": "Show me her picture",
-                        "payload": "image"http://www.rossipotti.de/inhalt/dateien/bilder/Noestlinger.jpg
-                        "postback":
-                    }
-                ]
-            }
-        }
-
 
 def reply_picture(recipient_id, picture):
     params = {
@@ -146,7 +117,7 @@ def reply_picture(recipient_id, picture):
             "attachment": {
                 "type": "image",
                 "payload": {
-                    "url" : picture
+                    "url": picture
                 }
             }
         }
