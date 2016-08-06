@@ -37,54 +37,40 @@ def post_webhook():
 
                     if 'text' in messaging_event['message']:
                         message_text = messaging_event['message']['text']
-                        image = "http://cdn.shopify.com/s/files/1/0080/8372/products/tattly_jen_mussari_hello_script_web_design_01_grande.jpg"
-                        element = create_generic_template_element("Hello", image, message_text)
-                        reply_with_generic_template(sender_id, [element])
-
-                        #do_rules(sender_id, message_text)
+                        rules(sender_id, message_text)
 
     return "ok", 200
 
-
-def get_url(url):
-    result = request.get(url)
-    return json.loads(result.content)
-
-
-def do_rules(recipient_id, message_text):
+def rules(recipient_id, message_text):
     rules = {
-        "Hello": "World",
-        "Foo": "Bar"
+        "Hello": "Hi!",
+        "Foo": "Bar",
+
+
     }
+
+    hellos = {"hi", "hey", "hallo", "hello", "heyya"}
+    Hernals = {"Hernals", "hernals", "1170", "hernois"}
+    thanks = {"Thank you", "Thanks", "thx", "thanks", "thank you"}
 
     if message_text in rules:
-        reply_with_text(recipient_id, rules[message_text])
+        reply(recipient_id, rules[message_text])
+    elif any("Noestlinger" in message_text):
+        reply(recipient_id, "Christine Noestlinger was born in 1936 in 1170 Vienna (Hernals). She is best known for her children's books. She calls herself a wild and angry child. :)")
+    elif message_text == "Awesome!":
+        reply_picture(recipient_id, "https://thesleepybooknerd.files.wordpress.com/2014/05/yeah-baby-gif-joey-friends.gif?w=440")
+    elif message_text in hellos:
+        reply(recipient_id, "Hi! I can give you information on women in your area who did great things. :) Tell me where you are or activate your GPS.")
+    elif any(x in message_text for x in Hernals):
+        reply(recipient_id, "Notable women in your are are Margarete Schütte-Lihotzky, Christine Nöstlinger and Hedy Lamarr.")
+    elif any(x in message_text for x in thanks):
+        reply(recipient_id, "You're welcome! Happy to help! :)")
 
     else:
-        reply_with_text(recipient_id, "You have to write something I understand ;)")
+        reply(recipient_id, "I'm sorry, I didn't get that. Could you please rephrase it?")
 
 
-def reply_with_text(recipient_id, message_text):
-    message = {
-        "text": message_text
-    }
-    reply_to_facebook(recipient_id, message)
-
-
-def reply_with_generic_template(recipient_id, elements):
-    message = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "generic",
-                "elements": elements
-            }
-        }
-    }
-    reply_to_facebook(recipient_id, message)
-
-
-def reply_to_facebook(recipient_id, message):
+def reply(recipient_id, message_text):
     params = {
         "access_token": access_token
     }
@@ -97,7 +83,9 @@ def reply_to_facebook(recipient_id, message):
         "recipient": {
             "id": recipient_id
         },
-        "message": message
+        "message": {
+            "text": message_text
+        }
     })
 
     print data
@@ -105,14 +93,35 @@ def reply_to_facebook(recipient_id, message):
     url = "https://graph.facebook.com/v2.6/me/messages?" + urllib.urlencode(params)
     r = requests.post(url=url, headers=headers, data=data)
 
+    print r.content
 
-def create_generic_template_element(title, image_url, subtitle):
-    return {
-        "title": title,
-        "image_url": image_url,
-        "subtitle": subtitle
+
+def reply_picture(recipient_id, picture):
+    params = {
+        "access_token": access_token
     }
 
+    headers = {
+        "Content-Type": "application/json"
+    }
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "attachment": {
+                "type": "image",
+                "payload": {
+                    "url" : picture
+                }
+            }
+        }
+    })
+
+    print data
+
+    url = "https://graph.facebook.com/v2.6/me/messages?" + urllib.urlencode(params)
+    r = requests.post(url=url, headers=headers, data=data)
+
+    print r.content
